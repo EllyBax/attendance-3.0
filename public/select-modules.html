@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Students</title>
+    <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet" />
+    <style>
+      @import url("/css/select-modules.css");
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Confirm your modules</h1>
+      <nav>
+        <ul>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <div class="container">
+        <form action="/register-student-modules" method="post" class="form">
+          <label for="project">
+            <input
+              type="checkbox"
+              name="Project Conceptualization"
+              id="project"
+            />ETU 08221 Project Conceptualization
+          </label>
+          <label for="radar">
+            <input type="checkbox" name="Radar" id="radar" />ETU 08222 Radar
+          </label>
+          <label for="broadcasting">
+            <input type="checkbox" name="Broadcasting" id="broadcasting" />ETU
+            08223 Broadcasting
+          </label>
+          <label for="satellite">
+            <input type="checkbox" name="Satellite" id="satellite" />ETU 08221
+            Satellite
+          </label>
+          <label for="robotics">
+            <input type="checkbox" name="Robotics" id="robotics" />COU 08202
+            Robotics
+          </label>
+          <label for="Entrepreneurship">
+            <input
+              type="checkbox"
+              name="Entrepreneurship"
+              id="Entrepreneurship"
+            />GSU 08211 Entrepreneurship
+          </label>
+
+          <button type="submit">Confirm</button>
+        </form>
+      </div>
+    </main>
+    <footer><p>2024&copy; DIT</p></footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const checkboxes = document.querySelectorAll("input[type='checkbox']");
+        checkboxes.forEach((checkbox) => {
+          checkbox.addEventListener("change", () => {
+            const label = checkbox.parentElement;
+            if (checkbox.checked) {
+              label.classList.add("checked");
+            } else {
+              label.classList.remove("checked");
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      @import url("/css/main.css");
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1 style="margin: 0">Welcome</h1>
+      <nav>
+        <ul>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <div class="nav">
+        <form action="/hod-login" method="post" id="loginForm">
+          <h2>Fill in the form below</h2>
+          <div class="formcheck">
+            <label for="email"> Email: </label>
+            <input
+              required
+              type="email"
+              id="email"
+              name="email"
+              placeholder="HOD Email"
+            />
+          </div>
+          <div class="formcheck">
+            <label for="password"> Password: </label>
+            <input
+              required
+              type="password"
+              id="password"
+              name="password"
+              placeholder="HOD Password"
+            />
+          </div>
+          <button id="submitButton" type="submit">SIGN IN</button>
+          <br />
+          <a href="/new-hod">No account? Register here</a>
+        </form>
+      </div>
+    </main>
+    <footer><p>2024&copy; DIT</p></footer>
+
+    <script>
+      const loginForm = document.getElementById("loginForm");
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        if (email.trim() === "") {
+          alert("Please enter email");
+        }
+        if (password.trim() === "") {
+          alert("Please enter password");
+        }
+        if (email.trim() !== "" && password.trim() !== "") {
+          loginForm.submit();
+        }
+      });
+    </script>
+  </body>
+</html>

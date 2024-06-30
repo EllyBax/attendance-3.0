@@ -1,0 +1,19 @@
+@import url("/css/main.css");
+.teacher-info {
+  width: 80%;
+  padding: 0 1rem;
+  text-align: start;
+}
+
+.teacher-name {
+  font-size: 2rem;
+  font-weight: bold;
+  width: max-content;
+}
+
+.teacher-department {
+  font-size: 1.2rem;
+  color: var(--hover-bg);
+  float: right;
+  width: max-content;
+}

@@ -1,0 +1,71 @@
+@import url("/css/main.css");
+
+body {
+  background-color: var(--main-bg);
+  color: var(--main-text);
+  margin: 0;
+  box-sizing: border-box;
+}
+header {
+  min-height: 20vh;
+  text-align: center;
+}
+main {
+  min-height: 75vh;
+  background-color: var(--second-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+main > .container {
+  height: auto;
+  margin: 1rem auto;
+  width: 80%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form label {
+  padding: 1rem;
+  width: calc(100% - 2rem);
+  background-color: var(--main-bg);
+  cursor: pointer;
+  border-radius: 10px;
+  display: flex;
+  gap: 1rem;
+  transition: all 0.5s ease;
+}
+
+.form label.checked {
+  background-color: var(--hover-bg);
+}
+
+.form label:hover {
+  background-color: var(--hover-bg);
+}
+
+.form > button {
+  all: unset;
+  border-radius: 4px;
+  width: fit-content;
+  padding: 10px 20px;
+  margin: 0 auto;
+  background-color: var(--main-bg);
+  color: var(--second-text);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.5s ease;
+}
+
+.form > button:hover {
+  background-color: var(--hover-bg);
+}
+
+footer {
+  text-align: center;
+}

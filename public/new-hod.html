@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      @import url("/css/main.css");
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1 style="margin: 0">Welcome</h1>
+      <nav>
+        <ul>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <div class="nav">
+        <form action="/hod-registration" method="post" id="hodForm">
+          <h2>Head of Department</h2>
+          <div class="formcheck">
+            <label for="name"> Name: </label>
+            <input
+              required
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Full Name"
+            />
+          </div>
+          <div class="formcheck">
+            <label for="email"> Email: </label>
+            <input
+              required
+              type="email"
+              id="email"
+              name="email"
+              placeholder="example@gmail.com"
+            />
+          </div>
+          <div class="formcheck">
+            <label for="phone"> Phone: </label>
+            <input
+              required
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="e.g. 07********"
+            />
+          </div>
+          <div class="formcheck">
+            <label for="password"> Password: </label>
+            <input
+              required
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter Password"
+            />
+          </div>
+          <div class="formcheck">
+            <label for="departmentCode">Department: </label>
+            <select name="departmentCode" id="departmentCode">
+              <option value="CS">Computer Science</option>
+              <option value="ETE">Electronics and Telecommunications</option>
+              <option value="EE">Electrical Engineering</option>
+              <option value="EE">Mining Engineering</option>
+              <option value="LTS">LabTech Engineering</option>
+              <option value="GS">General Studies</option>
+            </select>
+          </div>
+          <button id="submitButton" type="submit">REGISTER</button>
+          <br />
+          <a href="/hod-login">Have an account? Login Instead</a>
+        </form>
+        <br />
+      </div>
+    </main>
+    <footer><p>2024&copy; DIT</p></footer>
+  </body>
+</html>

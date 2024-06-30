@@ -1,0 +1,59 @@
+@import url("/css/main.css");
+
+.container {
+  display: flex;
+  min-height: 70vh;
+}
+
+.login-options {
+  display: flex;
+  width: calc(100vw - 4rem);
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 auto;
+}
+
+.login-options > a {
+  text-decoration: none;
+  height: 80%;
+  font-size: 2rem;
+  transition: all 0.5s ease;
+}
+
+.login-options > a:hover {
+  color: var(--success-bg);
+}
+
+.arrow {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: all 1s ease;
+}
+
+.hod:hover .arrow,
+.teacher:hover .arrow {
+  opacity: 1;
+  transform: none;
+}
+.hod,
+.teacher {
+  padding: 0 1rem;
+  width: 40%;
+  height: 100%;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  box-shadow: 0 0 4px var(--main-bg);
+  background: var(--main-bg);
+  color: var(--main-text);
+}
+
+@media (max-width: 768px) {
+  .login-options{
+    flex-direction: column;
+    margin: 2rem auto;
+  }
+}

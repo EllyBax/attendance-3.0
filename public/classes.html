@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    @import url('/css/main.css');
+  </style>
+</head>
+
+<body>
+    <header>
+      <h1 style="margin: 0">Welcome</h1>
+      <nav>
+        <ul>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+        </ul>
+      </nav>
+    </header>  <main>
+    <div class="navpane">
+      <% if (classes.length > 0){%>
+        <div class="navlinks">
+        <% for (let _class of classes) { %>
+            <a href="attendance/<%= _class.name %>">
+              <%= _class.name %>
+            </a>
+        <% } %>
+      </div>
+     <% } else {%>
+      <h3>No classes registered here</h3>
+      <% } %>
+      <br>
+    </div>
+  </main>
+    <footer><p>2024&copy; DIT</p></footer>
+
+</body>
+</html>
+
+</html>

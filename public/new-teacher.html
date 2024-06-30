@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      @import url("/css/main.css");
+    </style>
+  </head>
+
+  <body>
+        <header>
+      <h1 style="margin: 0">Welcome</h1>
+      <nav>
+        <ul>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <div class="nav">
+        <form action="/teacher-registration" method="post" id="teachersForm">
+          <h2>Teacher Registration</h2>
+          <div class="formcheck">
+            <label for="name"> Teacher's Name: </label>
+            <input type="text" id="name" name="name" placeholder="Full Name" />
+          </div>
+          <div class="formcheck">
+            <label for="identificationNumber"> ID Number: </label>
+            <input
+              type="text"
+              id="identificationNumber"
+              name="identificationNumber"
+              placeholder="Identification Number"
+            />
+          </div>
+          <button id="submitButton" type="submit">REGISTER</button><br />
+          <a href="/teacher-login">Have an account? Login Instead</a>
+        </form>
+        <br />
+      </div>
+    </main>
+    <footer><p>2024&copy; DIT</p></footer>
+  </body>
+</html>

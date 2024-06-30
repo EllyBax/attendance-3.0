@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <style>
+      @import url("/css/main.css");
+      @import url("/css/new-student.css");
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1 style="margin: 0">Welcome</h1>
+      <nav>
+        <ul>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main id="main">
+      <div class="nav">
+        <form action="/student-registration" method="post" id="studentsForm">
+          <h2>Student Registration</h2>
+          <div class="formcheck">
+            <label for="name"> Student's Name: </label>
+            <input type="text" id="name" name="name" placeholder="Full Name" />
+          </div>
+          <div class="formcheck">
+            <label for="registrationNumber"> Registration Number: </label>
+            <input
+              type="text"
+              id="registrationNumber"
+              name="registrationNumber"
+              placeholder="Registration Number"
+            />
+          </div>
+          <div class="formcheck">
+            <label for="fingerprintId"> Fingerprint Scan: </label>
+            <input
+              type="text"
+              id="fingerprintId"
+              name="fingerprintId"
+              placeholder="Fingerprint Scan"
+            />
+          </div>
+          <div class="formcheck">
+            <label for="_class"> Student's Class: </label>
+            <datalist id="classes">
+              <% for( let _class of classes ) { %> <% let className =
+              `${_class.name}${_class.course}` %>
+              <option value="<%= className %>"><%= className %></option>
+              <% } %>
+            </datalist>
+            <input
+              list="classes"
+              type="text"
+              id="_class"
+              name="_class"
+              placeholder="e.g BENG19 COE"
+            />
+          </div>
+          <button type="submit">REGISTER</button>
+        </form>
+        <br />
+      </div>
+    </main>
+    <footer><p>2024&copy; DIT</p></footer>
+  </body>
+</html>

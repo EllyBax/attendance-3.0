@@ -1,0 +1,34 @@
+@import url("/css/main.css");
+
+body {
+  overflow-x: hidden;
+  width: 100vh;
+}
+
+main{
+  all: unset;
+}
+
+.student-list {
+  margin: 1rem auto;
+  padding: 1rem;
+  width: calc(100% - 4rem);
+  background-color: var(--main-bg);
+}
+
+.student{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-radius: 5px;
+  border-bottom: 1px solid var(--hover-bg);
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+.student:hover{
+  border-bottom: 1px solid var(--second-bg);
+  background-color: var(--hover-bg);
+  filter: blur(1px);
+}

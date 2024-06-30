@@ -1,0 +1,40 @@
+@import url("/css/main.css");
+.table {
+  width: 100%; /* Adjusts the table width */
+  margin: 1rem auto;
+  padding: 0 1rem;
+  overflow-x: scroll;
+}
+
+.outlined-table {
+  border-collapse: collapse; /* Combines borders into a single border */
+}
+.outlined-table td,
+.outlined-table th {
+  overflow-wrap: break-word;
+  min-width: max-content;
+}
+
+.outlined-table td,
+.outlined-table th {
+  overflow-wrap: break-word;
+}
+
+.outlined-table th,
+.outlined-table td {
+  border: 2px solid var(--second-text); /* Defines the outline color and thickness */
+  padding: 8px; /* Adds space around the text */
+  text-align: left; /* Aligns text to the left */
+}
+
+.outlined-table th {
+  background: var(--second-bg);
+  color: var(--main-text);
+}
+.outlined-table td {
+  background-color: var(--main-bg);
+}
+
+.outlined-table td:hover {
+  background-color: var(--hover-bg);
+}

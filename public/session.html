@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet" />
+    <title>Document</title>
+    <style>
+      @import url("/css/main.css");
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 style="margin: 0">Welcome</h1>
+      <nav>
+        <ul>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <form>
+        <div class="formcheck">
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" />
+        </div>
+        <div class="formcheck">
+          <label for="_class">Class: </label>
+          <datalist id="classes">
+            <% for( let _class of classes ) { %> <% let className =
+            `${_class.name}${_class.course}` %>
+            <option value="<%= className %>"><%= className %></option>
+            <% } %>
+          </datalist>
+          <input
+            list="classes"
+            type="text"
+            id="_class"
+            name="_class"
+            placeholder="e.g BENG19 COE"
+          />
+        </div>
+        <div class="formcheck">
+          <label for="_module"> Module: </label>
+          <datalist id="modules">
+            <% for( let _module of modules ) { %> <% let moduleName =
+            `${_module.code}${_module.name}` %>
+            <option value="<%= _module.code %>"><%= moduleName %></option>
+            <% } %>
+          </datalist>
+          <input
+            list="modules"
+            type="text"
+            id="_module"
+            name="_module"
+            placeholder="e.g BENG19 COE"
+          />
+        </div>
+        <div class="formcheck">
+          <label for="start-time">Start Time:</label>
+          <input type="time" id="start-time" name="start-time" />
+        </div>
+        <div class="formcheck">
+          <label for="end-time">End Time:</label>
+          <input type="time" id="end-time" name="end-time" />
+        </div>
+        <button type="submit">Attendance</button>
+      </form>
+    </main>
+    <footer><p>2024&copy; DIT</p></footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const inputs = document.querySelectorAll("input");
+
+        inputs.forEach((inputElement) => {
+          // Add focus event listener
+          inputElement.addEventListener("focus", function () {
+            this.classList.add("focused");
+          });
+
+          // Add blur event listener
+          inputElement.addEventListener("blur", function () {
+            this.classList.remove("focused");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
