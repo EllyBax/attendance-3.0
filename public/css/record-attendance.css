@@ -1,0 +1,137 @@
+@import url("/css/main.css");
+* {
+  font-family: "Poppins", Arial, Helvetica, sans-serif;
+}
+
+body {
+  background-color: var(--main-bg);
+  color: var(--main-text);
+  margin: 0;
+  box-sizing: border-box;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+header {
+  min-height: 20vh;
+  text-align: center;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline-block;
+}
+
+nav a {
+  display: block;
+  padding: 10px 20px;
+  background-color: var(--second-bg);
+  color: var(--main-text);
+  text-decoration: none;
+  border-radius: 3px;
+  transition: 0.3s;
+}
+
+nav a.active {
+  background-color: var(--hover-bg);
+}
+
+nav a:hover {
+  background-color: var(--hover-bg);
+}
+main {
+  min-height: 75vh;
+  background-color: var(--second-bg);
+  display: flex;
+  flex-direction: column;
+}
+
+form {
+  padding: 20px;
+  border-radius: 5px;
+  width: 500px;
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.formcheck {
+  margin-bottom: 10px;
+  padding: 10px 1rem;
+  display: flex;
+  gap: 1rem;
+  border: 1px solid var(--main-bg);
+  border-bottom: 3px solid var(--main-bg);
+  align-items: center;
+  border-radius: 10px;
+  width: calc(100% - 2rem);
+}
+
+.formcheck label {
+  width: 40%;
+}
+
+.formcheck input {
+  width: 60%;
+}
+
+input[type="text"] {
+  padding: 10px;
+  border: 1px solid var(--second-bg);
+  background-color: var(--hover-bg);
+  border-radius: 3px;
+  outline: none;
+}
+
+input.focused {
+  background-color: var(--main-text);
+  color: var(--main-bg);
+}
+
+button[type="submit"] {
+  all: unset;
+  background-color: var(--main-bg);
+  font-weight: 500;
+  color: var(--main-text);
+  padding: 10px 20px;
+  margin: 0 auto;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+button[type="submit"]:hover,
+input[type="submit"]:hover {
+  background-color: var(--hover-bg);
+}
+
+input[type="submit"] {
+  padding: 10px 0;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.finish {
+  position: absolute;
+  bottom: 0;
+  right: 20px;
+}
+
+footer {
+  text-align: center;
+}

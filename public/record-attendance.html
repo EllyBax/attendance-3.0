@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Record Attendance</title>
+    <style>
+      @import url('/css/record-attendance.css');
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Record Session</h1>
+      <nav>
+        <ul>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+          <li><a href="#">location</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <form action="/assign-attendance" method="post">
+        <div class="formcheck">
+          <label for="fingerprint">Fingerprint <data></data>:</label>
+          <input type="text" id="fingerprint" name="fingerprint" />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+      <form action="/stop-attendance-record" class="finish">
+        <input
+          type="submit"
+          value="Finish"
+          title="Finish recording attendance for this session"
+        />
+      </form>
+    </main>
+    <footer><p>2024&copy; DIT</p></footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const inputs = document.querySelectorAll("input");
+
+        inputs.forEach((inputElement) => {
+          // Add focus event listener
+          inputElement.addEventListener("focus", function () {
+            this.classList.add("focused");
+          });
+
+          // Add blur event listener
+          inputElement.addEventListener("blur", function () {
+            this.classList.remove("focused");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

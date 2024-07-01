@@ -22,7 +22,7 @@
       </nav>
     </header>
     <main>
-      <form>
+      <form action="/record-attendance" method="post">
         <div class="formcheck">
           <label for="date">Date:</label>
           <input type="date" id="date" name="date" />
@@ -60,12 +60,12 @@
           />
         </div>
         <div class="formcheck">
-          <label for="start-time">Start Time:</label>
-          <input type="time" id="start-time" name="start-time" />
+          <label for="startTime">Start Time:</label>
+          <input type="time" id="startTime" name="startTime" />
         </div>
         <div class="formcheck">
-          <label for="end-time">End Time:</label>
-          <input type="time" id="end-time" name="end-time" />
+          <label for="endTime">End Time:</label>
+          <input type="time" id="endTime" name="endTime" />
         </div>
         <button type="submit">Attendance</button>
       </form>
