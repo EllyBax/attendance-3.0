@@ -9,11 +9,7 @@ dotenv.config();
 const { Pool } = pkg;
 
 const pool = new Pool({
-  database: "",
-  host: "",
-  password: "",
-  port: 5432,
-  user: "",
+  connectionString: process.env.DATABASE_URL,
   query_timeout: 3400,
   connectionTimeoutMillis: 3500,
 });
