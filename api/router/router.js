@@ -447,7 +447,6 @@ router.get("/attendance/:module", requireLogin, async (req, res) => {
   });
 });
 
-
 // back
 router.get("/back", async (req, res) => {
   return res.redirect("back");

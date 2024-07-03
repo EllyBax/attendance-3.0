@@ -22,6 +22,7 @@
 }
 
 .login-options > a:hover {
+  background-color: var(--hover-bg);
   color: var(--success-bg);
 }
 
