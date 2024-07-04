@@ -8,57 +8,28 @@
     <style>
       @import url("/css/select-modules.css");
     </style>
+    <script src="/js/main.js" defer></script>
   </head>
   <body>
-    <header>
-      <h1>Confirm your modules</h1>
-      <nav>
-        <ul>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-        </ul>
-      </nav>
-    </header>
+    <%- include('../partials/header') %>
     <main>
       <div class="container">
         <form action="/register-student-modules" method="post" class="form">
-          <label for="project">
+          <% for(let _module of modules) { %>
+          <label for="<%= _module.code %>">
             <input
               type="checkbox"
-              name="Project Conceptualization"
-              id="project"
-            />ETU 08221 Project Conceptualization
+              name="<%= _module.name %>"
+              value="<%= _module.code %>"
+              id="<%= _module.code %>"
+            /><%= _module.name %>
           </label>
-          <label for="radar">
-            <input type="checkbox" name="Radar" id="radar" />ETU 08222 Radar
-          </label>
-          <label for="broadcasting">
-            <input type="checkbox" name="Broadcasting" id="broadcasting" />ETU
-            08223 Broadcasting
-          </label>
-          <label for="satellite">
-            <input type="checkbox" name="Satellite" id="satellite" />ETU 08221
-            Satellite
-          </label>
-          <label for="robotics">
-            <input type="checkbox" name="Robotics" id="robotics" />COU 08202
-            Robotics
-          </label>
-          <label for="Entrepreneurship">
-            <input
-              type="checkbox"
-              name="Entrepreneurship"
-              id="Entrepreneurship"
-            />GSU 08211 Entrepreneurship
-          </label>
-
+          <% } %>
           <button type="submit">Confirm</button>
         </form>
       </div>
     </main>
-    <footer><p>2024&copy; DIT</p></footer>
+    <%- include ('../partials/footer') %>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {

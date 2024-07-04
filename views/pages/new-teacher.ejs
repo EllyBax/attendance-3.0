@@ -8,20 +8,11 @@
     <style>
       @import url("/css/main.css");
     </style>
+    <script src="/js/main.js" defer></script>
   </head>
 
   <body>
-    <header>
-      <h1 style="margin: 0">Welcome</h1>
-      <nav>
-        <ul>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-        </ul>
-      </nav>
-    </header>
+    <%- include('../partials/header') %>
     <main>
       <div class="nav">
         <form action="/teacher-registration" method="post" id="teachersForm">
@@ -42,8 +33,10 @@
           <div class="formcheck">
             <label for="department"> Department: </label>
             <datalist id="departments">
-              <% for( let department of departments ) { %> 
-              <option value="<%= department.code %>"><%= department.name %></option>
+              <% for( let department of departments ) { %>
+              <option value="<%= department.code %>">
+                <%= department.name %>
+              </option>
               <% } %>
             </datalist>
             <input
@@ -54,12 +47,21 @@
               placeholder="Eg. Telecom"
             />
           </div>
+          <div class="formcheck">
+            <label for="password"> Password: </label>
+            <input
+              type="text"
+              id="password"
+              name="password"
+              placeholder="Password"
+            />
+          </div>
           <button id="submitButton" type="submit">REGISTER</button><br />
           <a href="/teacher-login">Have an account? Login Instead</a>
         </form>
         <br />
       </div>
     </main>
-    <footer><p>2024&copy; DIT</p></footer>
+    <%- include ('../partials/footer') %>
   </body>
 </html>

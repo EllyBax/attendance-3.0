@@ -9,20 +9,11 @@
       @import url("/css/main.css");
       @import url("/css/new-student.css");
     </style>
+    <script src="/js/main.js" defer></script>
   </head>
 
   <body>
-    <header>
-      <h1 style="margin: 0">Welcome</h1>
-      <nav>
-        <ul>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-        </ul>
-      </nav>
-    </header>
+    <%- include('../partials/header') %>
     <main id="main">
       <div class="nav">
         <form action="/student-registration" method="post" id="studentsForm">
@@ -34,7 +25,7 @@
           <div class="formcheck">
             <label for="registrationNumber"> Registration Number: </label>
             <input
-              type="text"
+              type="number"
               id="registrationNumber"
               name="registrationNumber"
               placeholder="Registration Number"
@@ -53,7 +44,7 @@
             <label for="_class"> Student's Class: </label>
             <datalist id="classes">
               <% for( let _class of classes ) { %> <% let className =
-              `${_class.name}${_class.course}` %>
+              `${_class.name}` %>
               <option value="<%= className %>"><%= className %></option>
               <% } %>
             </datalist>
@@ -70,6 +61,6 @@
         <br />
       </div>
     </main>
-    <footer><p>2024&copy; DIT</p></footer>
+    <%- include ('../partials/footer') %>
   </body>
 </html>

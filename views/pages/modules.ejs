@@ -9,25 +9,15 @@
   <style>
     @import url('/css/main.css');
   </style>
-</head>
+<script  src="/js/main.js" defer></script> </head>
 
 <body>
-    <header>
-      <h1 style="margin: 0">Welcome</h1>
-      <nav>
-        <ul>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-        </ul>
-      </nav>
-    </header>  <main>
+    <%- include('../partials/header') %>  <main>
     <div class="navpane">
       <% if (modules.length > 0){%>
         <div class="navlinks">
         <% for (let _module of modules) { %>
-            <a href="attendance/<%= _module.code %>">
+            <a href="/attendance/<%= _module.code %>">
               <span style="color: green;"><%= _module.code %></span> <%= _module.name %>
             </a>
         <% } %>
@@ -38,7 +28,7 @@
       <br>
     </div>
   </main>
-    <footer><p>2024&copy; DIT</p></footer>
+    <%- include  ('../partials/footer') %>
 
 </body>
 </html>

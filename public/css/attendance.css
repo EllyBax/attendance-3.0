@@ -1,13 +1,23 @@
 @import url("/css/main.css");
+
+html{
+  overflow-x: hidden;
+}
+
 .table {
   width: 100%; /* Adjusts the table width */
   margin: 1rem auto;
   padding: 0 1rem;
   overflow-x: scroll;
+  scroll-snap-type: proximity;
+  scroll-behavior: smooth;
+  scrollbar-track-color: var(--hover-bg);
 }
 
 .outlined-table {
-  border-collapse: collapse; /* Combines borders into a single border */
+  border-collapse: collapse;
+   /* Combines borders into a single border */
+   margin: 1rem auto;
 }
 .outlined-table td,
 .outlined-table th {

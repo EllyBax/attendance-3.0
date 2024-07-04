@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model attendance {
+  id            Int     @id @default(autoincrement())
+  lessonid      Int
+  fingerprintid String  @db.VarChar(255)
+  present       Boolean @default(false)
+  lessons       lessons @relation(fields: [lessonid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model classes {
+  id             Int        @id @default(autoincrement())
+  name           String     @db.VarChar(20)
+  departmentcode String     @db.VarChar(10)
+  department     department @relation(fields: [departmentcode], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  lessons        lessons[]
+  modules        modules[]
+  students       students[]
+}
+
+model department {
+  code     String     @id @db.VarChar(10)
+  name     String     @db.VarChar(255)
+  classes  classes[]
+  modules  modules[]
+  teachers teachers[]
+}
+
+model hod {
+  id             Int    @id @default(autoincrement())
+  name           String @db.VarChar(255)
+  email          String @unique @db.VarChar(255)
+  phone          Int
+  password       String @db.VarChar(255)
+  departmentcode String @db.VarChar(10)
+}
+
+model lessons {
+  id         Int          @id @default(autoincrement())
+  date       String
+  classid    Int
+  modulecode String       @db.VarChar(20)
+  starttime  String
+  endtime    String
+  attendance attendance[]
+  classes    classes      @relation(fields: [classid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  modules    modules      @relation(fields: [modulecode], references: [code], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model modules {
+  code           String           @id @db.VarChar(20)
+  name           String           @db.VarChar(255)
+  teacherid      BigInt
+  departmentcode String           @db.VarChar(10)
+  classid        Int?
+  lessons        lessons[]
+  classes        classes?         @relation(fields: [classid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  department     department       @relation(fields: [departmentcode], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  student_module student_module[]
+}
+
+model student_module {
+  registrationnumber String
+  modulecode         String   @db.VarChar(20)
+  modules            modules  @relation(fields: [modulecode], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  students           students @relation(fields: [registrationnumber], references: [registrationnumber], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([registrationnumber, modulecode])
+}
+
+model students {
+  name               String           @db.VarChar(255)
+  registrationnumber String           @id
+  fingerprintid      String           @unique @db.VarChar(255)
+  classid            Int
+  student_module     student_module[]
+  classes            classes          @relation(fields: [classid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model teachers {
+  name                 String     @db.VarChar(255)
+  identificationnumber BigInt     @id @unique
+  departmentcode       String     @db.VarChar(10)
+  password             String     @db.VarChar(255)
+  department           department @relation(fields: [departmentcode], references: [code], onDelete: NoAction, onUpdate: NoAction)
+}

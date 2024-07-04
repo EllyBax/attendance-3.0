@@ -2,10 +2,9 @@
 
 body {
   overflow-x: hidden;
-  width: 100vh;
 }
 
-main{
+main {
   all: unset;
 }
 
@@ -16,18 +15,24 @@ main{
   background-color: var(--main-bg);
 }
 
-.student{
+.student {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
-  border-radius: 5px;
-  border-bottom: 1px solid var(--hover-bg);
+  padding: .2rem 1rem;
+  border-bottom: 2px solid var(--hover-bg);
   cursor: pointer;
-  margin-bottom: 5px;
 }
 
-.student:hover{
+.student p > span{
+  margin-right: 1rem;
+}
+
+.student p{
+  text-transform: uppercase;
+}
+
+.student:hover {
   border-bottom: 1px solid var(--second-bg);
   background-color: var(--hover-bg);
   filter: blur(1px);

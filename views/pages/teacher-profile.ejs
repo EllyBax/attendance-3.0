@@ -9,20 +9,11 @@
       @import url("/css/main.css");
       @import url("/css/teacher-profile.css");
     </style>
+    <script src="/js/main.js" defer></script>
   </head>
 
   <body>
-    <header>
-      <h1 style="margin: 0">Welcome</h1>
-      <nav>
-        <ul>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-        </ul>
-      </nav>
-    </header>
+    <%- include('../partials/header') %>
     <main>
       <div class="navpane">
         <div class="teacher-info">
@@ -31,18 +22,26 @@
         </div>
         <h4 style="color: green">Assigned Modules</h4>
         <div class="navlinks">
-          <a href="/attendance/CS101"
+          <% if (modules.length < 1) {%>
+          <h2 style="text-align: center;">Teacher has no assigned modules</h2>
+          <%} else {%> <% modules.forEach(_module => { %>
+          <a href="/attendance/<%= _module.code %> "
+            ><span style="color: green"><%= _module.code %></span>
+            <span><%= _module.name %></span></a
+          >
+          <% }) %> <% } %>
+          <!-- <a href="/attendance/CS101"
             ><span style="color: green">CS101</span>
             <span>Introduction to Computer Science</span></a
           >
           <a href="/attendance/CS201"
             ><span style="color: green">CS201</span>
             <span>Data Structures and Algorithms</span></a
-          >
+          > -->
         </div>
         <br />
       </div>
     </main>
-    <footer><p>2024&copy; DIT</p></footer>
+    <%- include ('../partials/footer') %>
   </body>
 </html>

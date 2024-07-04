@@ -1,6 +1,6 @@
 CREATE TABLE COURSES (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    departmentCode VARCHAR(10) NOT NULL,
-    FOREIGN KEY (departmentCode) REFERENCES DEPARTMENT(code)
+    departmentcode VARCHAR(10) NOT NULL,
+    FOREIGN KEY (departmentcode) REFERENCES DEPARTMENT(code)
 );

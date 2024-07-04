@@ -8,30 +8,21 @@
     <style>
       @import url("/css/main.css");
     </style>
+    <script src="/js/main.js" defer></script>
   </head>
 
   <body>
-    <header>
-      <h1 style="margin: 0">Welcome</h1>
-      <nav>
-        <ul>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-        </ul>
-      </nav>
-    </header>
+    <%- include('../partials/header') %>
     <main>
       <div class="navpane">
         <div class="navlinks">
           <a href="/teachers">TEACHERS</a>
           <a href="/classes">CLASSES</a>
-          <a href="/courses">COURSES</a>
+          <!-- <a href="/courses">COURSES</a> -->
           <a href="/modules">MODULES</a>
         </div>
       </div>
     </main>
-    <footer><p>2024&copy; DIT</p></footer>
+    <%- include ('../partials/footer') %>
   </body>
 </html>

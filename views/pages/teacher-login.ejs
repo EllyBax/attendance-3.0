@@ -3,25 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>LOGIN</title>
 
     <style>
       @import url("/css/main.css");
     </style>
+    <script src="/js/main.js" defer></script>
   </head>
 
   <body>
-    <header>
-      <h1 style="margin: 0">Welcome</h1>
-      <nav>
-        <ul>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-        </ul>
-      </nav>
-    </header>
+    <%- include('../partials/header') %>
     <main>
       <div class="nav">
         <form action="/teacher-login" method="post" id="loginForm">
@@ -45,6 +36,6 @@
         </form>
       </div>
     </main>
-    <footer><p>2024&copy; DIT</p></footer>
+    <%- include ('../partials/footer') %>
   </body>
 </html>

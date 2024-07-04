@@ -9,27 +9,21 @@
   <style>
     @import url('/css/students.css');
   </style>
-</head>
+<script  src="/js/main.js" defer></script> </head>
 
 <body>
-    <header>
-      <h1 style="margin: 0">Welcome</h1>
-      <nav>
-        <ul>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-        </ul>
-      </nav>
-    </header>  
+    <%- include('../partials/header') %>  
     <main>
       <div class="container">
       <% if (students.length > 0){%>
         <div class="student-list">
         <% for (let student of students) { %>
             <div class="student">
-              <span style="color: green;"><%= student.id %></span> <%= student.name %>
+              <p>
+                <span style="color: green;">
+                  <%= student.registrationnumber %>
+                </span> 
+              <%= student.name %></p>
             </div>
         <% } %>
       </div>
@@ -39,7 +33,7 @@
       <br>
     </div>
   </main>
-    <footer><p>2024&copy; DIT</p></footer>
+    <%- include  ('../partials/footer') %>
 
 </body>
 </html>

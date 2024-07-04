@@ -114,19 +114,16 @@ button[type="submit"] {
 }
 
 button[type="submit"]:hover,
-input[type="submit"]:hover {
+.finish-button:hover {
   background-color: var(--hover-bg);
 }
 
-input[type="submit"] {
-  padding: 10px 0;
+.finish-button {
+  padding: 1rem 2rem;
   border: none;
   border-radius: 3px;
   cursor: pointer;
   transition: all 0.4s ease;
-}
-
-.finish {
   position: absolute;
   bottom: 0;
   right: 20px;

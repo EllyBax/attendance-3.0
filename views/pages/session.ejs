@@ -4,23 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.cdnfonts.com/css/poppins" rel="stylesheet" />
-    <title>Document</title>
+    <title>RECORD LESSON</title>
     <style>
       @import url("/css/main.css");
     </style>
+    <script src="/js/main.js" defer></script>
   </head>
   <body>
-    <header>
-      <h1 style="margin: 0">Welcome</h1>
-      <nav>
-        <ul>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-        </ul>
-      </nav>
-    </header>
+    <%- include('../partials/header') %>
     <main>
       <form action="/record-attendance" method="post">
         <div class="formcheck">
@@ -30,9 +21,8 @@
         <div class="formcheck">
           <label for="_class">Class: </label>
           <datalist id="classes">
-            <% for( let _class of classes ) { %> <% let className =
-            `${_class.name}${_class.course}` %>
-            <option value="<%= className %>"><%= className %></option>
+            <% for( let _class of classes ) { %> 
+            <option value="<%= _class.name %>"><%= _class.name %></option>
             <% } %>
           </datalist>
           <input
@@ -46,9 +36,8 @@
         <div class="formcheck">
           <label for="_module"> Module: </label>
           <datalist id="modules">
-            <% for( let _module of modules ) { %> <% let moduleName =
-            `${_module.code}${_module.name}` %>
-            <option value="<%= _module.code %>"><%= moduleName %></option>
+            <% for( let _module of modules ) { %> 
+            <option value="<%= _module.code %>"><%= _module.name %></option>
             <% } %>
           </datalist>
           <input
@@ -56,7 +45,7 @@
             type="text"
             id="_module"
             name="_module"
-            placeholder="e.g BENG19 COE"
+            placeholder="e.g COU 08221"
           />
         </div>
         <div class="formcheck">
@@ -70,7 +59,7 @@
         <button type="submit">Attendance</button>
       </form>
     </main>
-    <footer><p>2024&copy; DIT</p></footer>
+    <%- include ('../partials/footer') %>
 
     <script>
       document.addEventListener("DOMContentLoaded", function () {

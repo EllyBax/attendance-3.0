@@ -9,28 +9,23 @@
   <style>
     @import url('/css/main.css');
   </style>
-</head>
+<script  src="/js/main.js" defer></script> </head>
 
 <body>
-    <header>
-      <h1 style="margin: 0">Welcome</h1>
-      <nav>
-        <ul>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-        </ul>
-      </nav>
-    </header>  <main>
+    <%- include('../partials/header') %>  <main>
     <div class="navpane">
       <% if (teachers.length > 0){%>
         <div class="navlinks">
-        <% for (let teacher of teachers) { %>
-            <a href="teachers/<%= teacher.id %>">
-              <span style="color: green;"><%= teacher.id %></span> <%= teacher.name %>
-            </a>
-        <% } %>
+        <% Object.entries(teachers).forEach(([key, value]) => { %>
+          <a 
+          href="teachers/<%= value.identificationnumber %>">
+            <span style="font-weight: bold; color: green">
+              <%= value.identificationnumber %>
+            </span> 
+            <%= value.name %>
+          </a>
+        <% }) %>
+
       </div>
      <% } else {%>
       <h3>No teachers registered here</h3>
@@ -38,7 +33,7 @@
       <br>
     </div>
   </main>
-    <footer><p>2024&copy; DIT</p></footer>
+    <%- include  ('../partials/footer') %>
 
 </body>
 </html>

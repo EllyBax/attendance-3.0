@@ -8,20 +8,11 @@
     <style>
       @import url("/css/main.css");
     </style>
+    <script src="/js/main.js" defer></script>
   </head>
 
   <body>
-    <header>
-      <h1 style="margin: 0">Welcome</h1>
-      <nav>
-        <ul>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-        </ul>
-      </nav>
-    </header>
+    <%- include('../partials/header') %>
     <main>
       <div class="nav">
         <form action="/hod-registration" method="post" id="hodForm">
@@ -67,8 +58,8 @@
             />
           </div>
           <div class="formcheck">
-            <label for="departmentCode">Department: </label>
-            <select name="departmentCode" id="departmentCode">
+            <label for="departmentcode">Department: </label>
+            <select name="departmentcode" id="departmentcode">
               <option value="CS">Computer Science</option>
               <option value="ETE">Electronics and Telecommunications</option>
               <option value="EE">Electrical Engineering</option>
@@ -84,6 +75,6 @@
         <br />
       </div>
     </main>
-    <footer><p>2024&copy; DIT</p></footer>
+    <%- include ('../partials/footer') %>
   </body>
 </html>

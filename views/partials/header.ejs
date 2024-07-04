@@ -1,0 +1,27 @@
+<header>
+  <% if (messages.success) { %>
+  <div class="success">
+    <p><%= messages.success %></p>
+    <button class="close-btn" onclick="closeFlashMessage(this)">&times;</button>
+  </div>
+  <% } %> <% if (messages.error) { %>
+  <div class="error">
+    <p><%= messages.error %></p>
+    <button class="close-btn" onclick="closeFlashMessage(this)">&times;</button>
+  </div>
+  <% } %>
+  <h1><%= title %></h1>
+  <% if (links.length > 0) { %> <% links.forEach(link => { %>
+  <nav>
+    <ul>
+      <li>
+        <a href="<%= link.url %>"><%= link.name %></a>
+      </li>
+      <% }) %>
+      <li><%- include ('../partials/back') %></li>
+    </ul>
+  </nav>
+  <% } else {%>
+    <p>Student Attendance tracking portal</p>
+  <% } %> 
+</header>

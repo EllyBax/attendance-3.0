@@ -9,20 +9,10 @@
   <style>
     @import url('/css/main.css');
   </style>
-</head>
+<script  src="/js/main.js" defer></script> </head>
 
 <body>
-    <header>
-      <h1 style="margin: 0">Welcome</h1>
-      <nav>
-        <ul>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-          <li><a href="#">location</a></li>
-        </ul>
-      </nav>
-    </header>  <main>
+    <%- include('../partials/header') %>  <main>
     <div class="navpane">
       <% if (courses.length > 0){%>
         <div class="navlinks">
@@ -38,7 +28,7 @@
       <br>
     </div>
   </main>
-    <footer><p>2024&copy; DIT</p></footer>
+    <%- include  ('../partials/footer') %>
 
 </body>
 </html>
