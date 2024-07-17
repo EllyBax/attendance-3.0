@@ -15,7 +15,7 @@
     <%- include('../partials/header') %>
     <main>
       <% if (lessons.length > 0) { %>
-             <div class="table">
+      <div class="table">
         <table class="outlined-table">
           <thead>
             <tr>
@@ -30,7 +30,7 @@
           <tbody>
             <% students.forEach(student => { %>
             <tr>
-              <td><%= student.name %></td>
+              <td style="text-transform: capitalize;"><%= student.name %></td>
               <td><%= student.registrationnumber %></td>
               <% lessons.forEach(lesson => { %>
               <td>

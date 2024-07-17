@@ -196,7 +196,7 @@ router.get("/teachers", requireHodLogin, async (req, res) => {
     },
   });
 
-  const teachersPromise = await modules.map(async (_module) => {
+  const teachersPromise = modules.map(async (_module) => {
     const teachers = await prisma.teachers.findMany({
       where: {
         identificationnumber: _module.teacherid,
@@ -206,6 +206,7 @@ router.get("/teachers", requireHodLogin, async (req, res) => {
   });
 
   const teachers = await Promise.all(teachersPromise);
+  console.log(teachers);
 
   return res.render("pages/teachers", {
     title: "teachers page",
