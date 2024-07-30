@@ -159,13 +159,27 @@ router.post("/hod-registration", async (req, res) => {
     password: await argon.hash(hodData.password),
     departmentcode: hodData.departmentcode,
   };
-  const hod = await prisma.hod.create({
-    data: data,
-  });
-  req.session.departmentcode = hod.departmentcode;
-  req.session.sessionId = `${hod.departmentcode}-${hod.id}`;
-  req.session.hodId = `${hod.departmentcode}-${hod.id}`;
-  return res.redirect("/hod-index");
+  try {
+    const existingHOD = await prisma.hod.findFirst({
+      where: {
+        departmentcode: data.departmentcode
+      }
+    })
+    if (existingHOD === null) {
+      const hod = await prisma.hod.create({
+        data: data,
+      });
+      req.session.departmentcode = hod.departmentcode;
+      req.session.sessionId = `${hod.departmentcode}-${hod.id}`;
+      req.session.hodId = `${hod.departmentcode}-${hod.id}`;
+      return res.redirect("/hod-index");
+    } else {
+      req.flash("error", 'HOD exists for this department!')
+      return res.redirect("back")
+    }
+  } catch (error) {
+    throw new Error("Error: ", error)
+  }
 });
 
 /**
@@ -205,12 +219,16 @@ router.get("/teachers", requireHodLogin, async (req, res) => {
     return teachers;
   });
 
-  const teachers = await Promise.all(teachersPromise);
-  console.log(teachers);
+  const teachers = (await Promise.all(teachersPromise)).flat();
 
+  const departmentTeachers = await prisma.teachers.findMany({
+    where: {
+      departmentcode: req.session.departmentcode
+    }
+  })
   return res.render("pages/teachers", {
     title: "teachers page",
-    teachers: teachers.flat(),
+    teachers: departmentTeachers,
     links: navlinks.general,
   });
 });
