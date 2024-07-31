@@ -9,33 +9,36 @@
   <style>
     @import url('/css/students.css');
   </style>
-<script  src="/js/main.js" defer></script> </head>
+  <script src="/js/main.js" defer></script>
+</head>
 
 <body>
-    <%- include('../partials/header') %>  
+  <%- include('../partials/header') %>
     <main>
       <div class="container">
-      <% if (students.length > 0){%>
-        <div class="student-list">
-        <% for (let student of students) { %>
-            <div class="student">
-              <p>
-                <span style="color: green;">
-                  <%= student.registrationnumber %>
-                </span> 
-              <%= student.name %></p>
-            </div>
-        <% } %>
+        <% if (students.length> 0){%>
+          <div class="student-list">
+            <% for (let student of students) { %>
+              <div class="student">
+                <p>
+                  <span style="color: rgb(61, 194, 61);color: rgb(61, 194, 61);">
+                    <%= student.registrationnumber %>
+                  </span>
+                  <%= student.name %>
+                </p>
+              </div>
+              <% } %>
+          </div>
+          <% } else {%>
+            <h3>No students registered here</h3>
+            <% } %>
+              <br>
       </div>
-     <% } else {%>
-      <h3>No students registered here</h3>
-      <% } %>
-      <br>
-    </div>
-  </main>
-    <%- include  ('../partials/footer') %>
+    </main>
+    <%- include ('../partials/footer') %>
 
 </body>
+
 </html>
 
 </html>

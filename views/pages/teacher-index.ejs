@@ -2,12 +2,12 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOME</title>
 
   <style>
-    @import url('/css/main.css');
+    @import url("/css/main.css");
   </style>
   <script src="/js/main.js" defer></script>
 </head>
@@ -18,9 +18,12 @@
       <div class="navpane">
         <% if (modules.length> 0){%>
           <div class="navlinks">
+            <h2 style="text-align: start; margin: 0; color: rgb(63, 207, 63);">Welcome, <%= name %>
+            </h2>
+            <h3 style="text-align: center; margin: 0; color: rgb(40, 149, 40);">Your Modules</h3>
             <% for (let _module of modules) { %>
               <a href="/attendance/<%= _module.code %>">
-                <span style="color: rgb(61, 194, 61);color: rgb(61, 194, 61);">
+                <span style="color: rgb(61, 194, 61);">
                   <%= _module.code %>
                 </span>
                 <%= _module.name %>
@@ -28,15 +31,12 @@
               <% } %>
           </div>
           <% } else {%>
-            <h3>No modules registered here</h3>
+            <h3>Teacher has no registered modules</h3>
             <% } %>
               <br>
       </div>
     </main>
     <%- include ('../partials/footer') %>
-
 </body>
-
-</html>
 
 </html>

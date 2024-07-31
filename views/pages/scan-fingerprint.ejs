@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SCAN</title>
+
+  <style>
+    @import url('/css/students.css');
+  </style>
+  <script src="/js/main.js" defer></script>
+  <script src="https://unpkg.com/htmx.org@2.0.1"></script>
+</head>
+
+<body>
+  <%- include('../partials/header') %>
+    <main>
+<div class="container" style="text-align: center; background: var(--second-bg); min-height: 60vh;">
+  <h1>Scan your fingerprint</h1>
+  <p id="fingerprint-id"></p>
+  <button hx-get="/get-fingerprint-id" hx-trigger="click" hx-target="#fingerprint-id" hx-swap="innerHTML">
+    Get ID
+  </button>
+  <!-- <button hx-get="/get-fingerprint-id" hx-trigger="click" hx-target="#fingerprint-id" hx-swap="innerHTML">
+    Get ID
+  </button> -->
+</div>
+    </main>
+    <%- include ('../partials/footer') %>
+</body>
+
+</html>
+
+</html>

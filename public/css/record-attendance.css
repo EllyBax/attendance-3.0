@@ -95,7 +95,9 @@ input[type="text"] {
   outline: none;
 }
 
-input.focused {
+input:focus,
+input:focus-visible,
+input:focus-within {
   background-color: var(--main-text);
   color: var(--main-bg);
 }

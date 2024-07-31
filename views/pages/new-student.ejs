@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
 
-    <style>
-      @import url("/css/main.css");
-      @import url("/css/new-student.css");
-    </style>
-    <script src="/js/main.js" defer></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
 
-  <body>
-    <%- include('../partials/header') %>
+  <style>
+    @import url("/css/main.css");
+    @import url("/css/new-student.css");
+  </style>
+  <script src="/js/main.js" defer></script>
+</head>
+
+<body>
+  <%- include('../partials/header') %>
     <main id="main">
       <div class="nav">
         <form action="/student-registration" method="post" id="studentsForm">
@@ -24,43 +25,30 @@
           </div>
           <div class="formcheck">
             <label for="registrationNumber"> Registration Number: </label>
-            <input
-              type="number"
-              id="registrationNumber"
-              name="registrationNumber"
-              placeholder="Registration Number"
-            />
+            <input type="text" id="registrationNumber" name="registrationNumber" placeholder="Registration Number" />
           </div>
-          <div class="formcheck">
+          <!-- <div class="formcheck">
             <label for="fingerprintId"> Fingerprint Scan: </label>
-            <input
-              type="text"
-              id="fingerprintId"
-              name="fingerprintId"
-              placeholder="Fingerprint Scan"
-            />
-          </div>
+            <input type="text" id="fingerprintId" name="fingerprintId" placeholder="Fingerprint Scan" />
+          </div> -->
           <div class="formcheck">
             <label for="_class"> Student's Class: </label>
             <datalist id="classes">
-              <% for( let _class of classes ) { %> <% let className =
-              `${_class.name}` %>
-              <option value="<%= className %>"><%= className %></option>
-              <% } %>
+              <% for( let _class of classes ) { %>
+                <% let className=`${_class.name}` %>
+                  <option value="<%= className %>">
+                    <%= className %>
+                  </option>
+                  <% } %>
             </datalist>
-            <input
-              list="classes"
-              type="text"
-              id="_class"
-              name="_class"
-              placeholder="e.g BENG19 COE"
-            />
+            <input list="classes" type="text" id="_class" name="_class" placeholder="e.g BENG19 COE" />
           </div>
-          <button type="submit">REGISTER</button>
+          <button type="submit">ENROLL FINGERPRINT</button>
         </form>
         <br />
       </div>
     </main>
     <%- include ('../partials/footer') %>
-  </body>
+</body>
+
 </html>
