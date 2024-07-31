@@ -1,61 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
 
-    <style>
-      @import url("/css/attendance.css");
-    </style>
-    <script src="/js/main.js" defer></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATTENDANCE</title>
 
-  <body>
-    <%- include('../partials/header') %>
+  <style>
+    @import url("/css/attendance.css");
+  </style>
+  <script src="/js/main.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+</head>
+
+<body>
+  <%- include('../partials/header') %>
     <main>
-      <% if (lessons.length > 0) { %>
-      <div class="table">
-        <table class="outlined-table">
-          <thead>
-            <tr>
-              <th>Student Name</th>
-              <th>Student ID</th>
-              <% lessons.forEach((lesson, index) => { %>
-              <th>Lesson <%= index + 1 %></th>
-              <% }) %>
-              <th>Attendance %</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% students.forEach(student => { %>
-            <tr>
-              <td style="text-transform: capitalize;"><%= student.name %></td>
-              <td><%= student.registrationnumber %></td>
-              <% lessons.forEach(lesson => { %>
-              <td>
-                <% const attendanceRecord = attendanceRecords.find(record =>
-                record.fingerprintid === student.fingerprintid &&
-                record.lessonid === lesson.id) %> <% if (attendanceRecord &&
-                attendanceRecord.present) { %> ✅ <% } else { %> ❌ <% } %>
-              </td>
-              <% }) %>
-              <td>
-                <% const totalLessons = lessons.length %> <% const presentCount
-                = attendanceRecords.filter(record => record.fingerprintid ===
-                student.fingerprintid && record.present).length %> <%=
-                ((presentCount / totalLessons) * 100).toFixed(2) %>%
-              </td>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
-      </div>
-      <% } else { %>
-        <h2 style="text-align: center;">No records here!</h2>
-       <% } %> 
+      <% if (lessons.length> 0) { %>
+        <div class="table">
+          <table class="outlined-table">
+            <thead>
+              <tr>
+                <th>Student Name</th>
+                <th>Student ID</th>
+                <% lessons.forEach((lesson, index)=> { %>
+                  <th class="lesson-row">Lesson <%= index + 1 %>
+                  </th>
+                  <% }) %>
+                    <th>Attendance %</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% students.forEach(student=> { %>
+                <tr>
+                  <td style="text-transform: capitalize;">
+                    <%= student.name %>
+                  </td>
+                  <td>
+                    <%= student.registrationnumber %>
+                  </td>
+                  <% lessons.forEach(lesson=> { %>
+                    <td>
+                      <% const attendanceRecord=attendanceRecords.find(record=>
+                        record.fingerprintid === student.fingerprintid &&
+                        record.lessonid === lesson.id) %> <% if (attendanceRecord && attendanceRecord.present) { %> ✅ <%
+                            } else { %> ❌ <% } %>
+                    </td>
+                    <% }) %>
+                      <td>
+                        <% const totalLessons=lessons.length %>
+                          <% const presentCount=attendanceRecords.filter(record=> record.fingerprintid ===
+                            student.fingerprintid && record.present).length %> <%= ((presentCount / totalLessons) *
+                              100).toFixed(2) %>%
+                      </td>
+                </tr>
+                <% }) %>
+            </tbody>
+          </table>
+        </div>
+        <button id="exportPdf" class="toPdf">Export to PDF</button>
+        <% } else { %>
+          <h2 style="text-align: center;">No records here!</h2>
+          <% } %>
     </main>
 
     <%- include ('../partials/footer') %>
-  </body>
+
+      <script>
+        document.getElementById('exportPdf').addEventListener('click', function () {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF('l', 'mm', 'a4')
+
+          // Add title
+          doc.setFontSize(18);
+          doc.text('<%= title %>', 14, 22);
+
+          // Get the table data
+          const tableData = [];
+          const headers = [];
+          const table = document.querySelector('.outlined-table');
+
+          // Get headers
+          table.querySelectorAll('thead th').forEach(th => {
+            if (th.classList.contains('lesson-row')) {
+              headers.push(th.textContent.replace('Lesson ', "L-"))
+            } else {
+              headers.push(th.textContent.trim())
+            }
+          });
+
+          // Get rows
+          table.querySelectorAll('tbody tr').forEach(tr => {
+            const row = [];
+            tr.querySelectorAll('td').forEach(td => {
+              if (td.textContent.trim() === "❌") {
+                row.push('N')
+              }
+              else if (td.textContent.trim() === "✅") {
+                row.push('Y')
+              } else {
+                row.push(td.textContent.trim())
+              }
+            });
+            tableData.push(row);
+          });
+
+          // Generate the PDF
+          doc.autoTable({
+            head: [headers],
+            body: tableData,
+            startY: 30,
+            styles: { fontSize: 8, cellPadding: 2 },
+            columnStyles: { 0: { cellWidth: 40 } } // Adjust the width of the first column (student name)
+          });
+
+          // Save the PDF
+          doc.save('<%= title %>.pdf');
+        });
+      </script>
+</body>
+
 </html>
