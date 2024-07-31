@@ -66,6 +66,14 @@ router.use((req, res, next) => {
   res.locals.messages = req.flash();
   next();
 });
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
+
+// Debugging middleware to log requests
+// router.use((req, res, next) => {
+//   console.log("Request Body:", req.body);
+//   next();
+// });
 
 function requireLogin(req, res, next) {
   if (req.session.sessionId) {
@@ -85,6 +93,16 @@ function requireHodLogin(req, res, next) {
   }
 }
 
+function requireFingerprintId(req, res, next) {
+  if (req.session.studentFingerprintId) {
+    req.flash("success", "Fingerprint succesfully scanned!");
+    next();
+  } else {
+    req.flash("error", "Enter fingerprint!");
+    return res.redirect("/scan-fingerprint");
+  }
+}
+
 // home page
 router.get("/", (req, res) => {
   res.render("pages/index", { title: "Welcome", links: navlinks.index });
@@ -94,7 +112,7 @@ router.get("/home", (req, res) => {
   if (req.session.hodId) {
     res.redirect("/hod-index");
   } else if (req.session.sessionId) {
-    res.redirect("/record-session");
+    res.redirect("/teacher-index");
   } else {
     res.redirect("/");
   }
@@ -143,6 +161,29 @@ router.get("/hod-index", requireHodLogin, (req, res) => {
   });
 });
 
+router.get("/teacher-index", requireLogin, async (req, res) => {
+  try {
+    const loggedInTeacher = await prisma.teachers.findFirst({
+      where: { identificationnumber: BigInt(req.session.teacherId) },
+    });
+
+    const modules = await prisma.modules.findMany({
+      where: { teacherid: loggedInTeacher.identificationnumber },
+    });
+    return res.render("pages/teacher-index", {
+      modules,
+      name: loggedInTeacher.name,
+      title: "Teacher homepage",
+      links: navlinks.home,
+    });
+  } catch (error) {
+    console.error("Error fetching teachers modules: ", error);
+    req.flash("error", "Couldn't find teacher's modules");
+    res.redirect("back");
+    throw new Error(error);
+  }
+});
+
 router.get("/new-hod", async (req, res) => {
   return res.render("pages/new-hod", {
     title: "Register HOD",
@@ -162,9 +203,9 @@ router.post("/hod-registration", async (req, res) => {
   try {
     const existingHOD = await prisma.hod.findFirst({
       where: {
-        departmentcode: data.departmentcode
-      }
-    })
+        departmentcode: data.departmentcode,
+      },
+    });
     if (existingHOD === null) {
       const hod = await prisma.hod.create({
         data: data,
@@ -174,11 +215,11 @@ router.post("/hod-registration", async (req, res) => {
       req.session.hodId = `${hod.departmentcode}-${hod.id}`;
       return res.redirect("/hod-index");
     } else {
-      req.flash("error", 'HOD exists for this department!')
-      return res.redirect("back")
+      req.flash("error", "HOD exists for this department!");
+      return res.redirect("back");
     }
   } catch (error) {
-    throw new Error("Error: ", error)
+    throw new Error("Error: ", error);
   }
 });
 
@@ -187,18 +228,28 @@ router.post("/hod-registration", async (req, res) => {
  */
 // teachers routes
 router.get("/record-session", requireLogin, async (req, res) => {
-  const classes = await prisma.classes.findMany({
-    where: { departmentcode: req.session.departmentcode },
+  const teacherModules = await prisma.modules.findMany({
+    where: { teacherid: BigInt(req.session.teacherId) },
   });
-  const modules = await prisma.modules.findMany({
+  const classes = await prisma.classes.findMany({
     where: {
       departmentcode: req.session.departmentcode,
     },
+    include: {
+      modules: true,
+    },
   });
+
+  let classesModules = classes.flatMap((cls) => cls.modules);
+  const matchingModules = classesModules.filter((classModule) =>
+    teacherModules.some(
+      (teacherModule) => teacherModule.teacherid === classModule.teacherid
+    )
+  );
   return res.render("pages/session", {
     title: "Record Attendance",
     classes,
-    modules,
+    modules: matchingModules,
     links: navlinks.recordSession,
   });
 });
@@ -223,9 +274,9 @@ router.get("/teachers", requireHodLogin, async (req, res) => {
 
   const departmentTeachers = await prisma.teachers.findMany({
     where: {
-      departmentcode: req.session.departmentcode
-    }
-  })
+      departmentcode: req.session.departmentcode,
+    },
+  });
   return res.render("pages/teachers", {
     title: "teachers page",
     teachers: departmentTeachers,
@@ -253,11 +304,11 @@ router.post("/teacher-login", async (req, res) => {
   } else {
     const validPassword = argon.verify(existingTeacher.password, password);
     if (validPassword) {
-      req.session.sessionId = `${existingTeacher.departmentcode}-${existingTeacher.id}`;
-      req.session.teacherId = existingTeacher.id;
+      req.session.sessionId = `${existingTeacher.departmentcode}-${existingTeacher.identificationnumber}`;
+      req.session.teacherId = existingTeacher.identificationnumber.toString(); // Convert BigInt to string
       req.session.departmentcode = existingTeacher.departmentcode;
       req.flash("success", "Login Successful");
-      return res.redirect(`/record-session`);
+      return res.redirect(`/home`);
     } else {
       req.flash("error", "Invalid Password");
       return res.redirect("back");
@@ -265,7 +316,7 @@ router.post("/teacher-login", async (req, res) => {
   }
 });
 
-router.get("/new-teacher", async (req, res) => {
+router.get("/new-teacher", requireHodLogin, async (req, res) => {
   const departments = await prisma.department.findMany();
   return res.render("pages/new-teacher", {
     title: "new teacher page",
@@ -287,8 +338,8 @@ router.post("/teacher-registration", async (req, res) => {
     });
     console.log("Teacher created successfully!\n");
     req.flash("success", "Profile created successfully");
-    req.session.sessionId = `${teacher.departmentcode}-${teacher.id}`;
-    return res.redirect(`/teachers/${teacher.id}`);
+    req.session.sessionId = `${teacher.departmentcode}-${teacher.identificationnumber}`;
+    return res.redirect(`/teachers/${teacher.identificationnumber}`);
   } catch (err) {
     console.error("Error creating profile:", err);
     req.flash("error", "Error creating profile");
@@ -394,7 +445,7 @@ router.get("/modules/:className", requireHodLogin, async (req, res) => {
 // });
 
 // students
-router.get("/students", requireHodLogin, async (req, res) => {
+router.get("/students", requireLogin, async (req, res) => {
   const _class = await prisma.classes.findFirst({
     where: {
       id: req.session.studentClass,
@@ -412,7 +463,7 @@ router.get("/students", requireHodLogin, async (req, res) => {
   });
 });
 
-router.get("/new-student", requireHodLogin, async (req, res) => {
+router.get("/new-student", requireLogin, async (req, res) => {
   const classes = await prisma.classes.findMany();
   return res.render("pages/new-student", {
     title: "Register Student",
@@ -421,39 +472,122 @@ router.get("/new-student", requireHodLogin, async (req, res) => {
   });
 });
 
-router.post("/student-registration", requireHodLogin, async (req, res) => {
-  const { name, registrationNumber, fingerprintId, _class } = req.body;
-  console.log(String(registrationNumber));
-  const _classid = await prisma.classes.findFirst({
-    where: {
-      name: _class,
-    },
-    select: { id: true },
-  });
+router.post("/student-registration", requireLogin, async (req, res) => {
+  const { name, registrationNumber, _class } = req.body;
+
+  if (name === "" || registrationNumber === "" || _class == "") {
+    req.flash("error", "Fill in all required fields!");
+    return res.redirect("back");
+  }
 
   try {
+    const _classid = await prisma.classes.findFirst({
+      where: { name: _class },
+      select: { id: true },
+    });
+
+    if (!_classid) {
+      req.flash("error", "Invalid class selected");
+      return res.redirect("back");
+    }
+
+    let lastFingerprintId = await prisma.students.count({
+      where: { classid: _classid.id },
+    });
+
+    let fingerprintid = ++lastFingerprintId;
+
     const student = await prisma.students.create({
       data: {
         name,
-        registrationnumber: String(registrationNumber),
-        fingerprintid: fingerprintId,
+        registrationnumber: registrationNumber,
         classid: _classid.id,
+        fingerprintid: fingerprintid,
       },
     });
-    req.flash("success", "Registration successful");
-    req.session.studentId = student.registrationnumber;
-    req.session.studentClass = student.classid;
 
+    console.log({
+      name,
+      registrationNumber: registrationNumber,
+      classid: _classid.id,
+      fingerprintid: fingerprintid,
+    });
+
+    req.session.studentId = student.registrationnumber.toString();
+    req.session.studentClass = student.classid;
+    req.session.fingerprintid = student.fingerprintid;
+    req.flash(
+      "success",
+      `Registration successful, your fingerprint id is ${req.session.fingerprintid}`
+    );
     return res.redirect("/select-modules");
   } catch (error) {
-    console.error(error);
-    req.flash("error", "Registration failed!");
-    // throw new Error(error);
+    console.error("Error in student registration:", error);
+    req.flash("error", "An error occurred during registration");
     return res.redirect("back");
   }
 });
 
-router.get("/select-modules", requireHodLogin, async (req, res) => {
+router.post("/logger", (req, res) => {
+  return res.send({ data: req.body });
+});
+
+// Fingerprint submission route
+router.post("/submit-fingerprint", async (req, res) => {
+  const fingerprintId = req.body.fingerprintData;
+  const currentDate = new Date();
+
+  try {
+    await prisma.fingerprintscans.create({
+      data: {
+        fingerprintid: fingerprintId,
+        createdat: currentDate,
+      },
+    });
+    return res.status(200).send({ success: "Fingerprint scan successful!" });
+  } catch (err) {
+    console.error("Error storing fingerprintData: ", err);
+    // req.flash("error", "Couldn't process fingerprint");
+    return res.status(400).send({ error: "Couldn't process fingerprint" });
+  }
+});
+
+// Get fingerprint ID route
+router.get("/get-fingerprint-id", requireLogin, async (req, res) => {
+  try {
+    const latestScan = await prisma.fingerprintscans.findFirst({
+      orderBy: {
+        createdat: "desc",
+      },
+    });
+    req.session.latestScanTime = latestScan.createdat;
+    req.session.latestScanId = latestScan.fingerprintid;
+    if (!latestScan) {
+      console.log("No fingerprint scanned yet");
+      return res.send(`  
+          <label for="name">Name: </label>
+          <input type="text" id="name" name="name" placeholder="Students Name" value="No fingerprint scanned yet" disabled/>
+        `);
+    } else {
+      const student = await prisma.students.findFirst({
+        where: { fingerprintid: latestScan.fingerprintid },
+      });
+      return res.send(`
+        <label for="name">Name: </label>
+        <input type="text" id="name" name="name" placeholder="Students Name" value="${student.name}"/>
+      `);
+    }
+  } catch (err) {
+    console.error("Error getting fingerprintData: ", err);
+    req.flash("error", "Couldn't fetch fingerprint");
+    return res.send(`
+        <label for="name">Name: </label>
+        <input type="text" id="name" name="name" placeholder="Students Name" value="Try Again!" disabled/>
+      `);
+  }
+});
+
+router.get("/select-modules", requireLogin, async (req, res) => {
   const _class = req.session.studentClass;
   const modules = await prisma.modules.findMany({
     where: {
@@ -467,7 +601,7 @@ router.get("/select-modules", requireHodLogin, async (req, res) => {
   });
 });
 
-router.post("/register-student-modules", requireHodLogin, async (req, res) => {
+router.post("/register-student-modules", requireLogin, async (req, res) => {
   const modules = req.body;
   const selectedModules = Object.values(modules);
   try {
@@ -499,16 +633,28 @@ router.post("/register-student-modules", requireHodLogin, async (req, res) => {
 // session and attendance
 router.get("/record-session", requireLogin, async (req, res) => {
   const teacherModules = await prisma.modules.findMany({
-    where: { teacherid: req.session.teacherId },
+    where: { teacherid: BigInt(req.session.teacherId) },
   });
   const classes = await prisma.classes.findMany({
     where: {
       departmentcode: req.session.departmentcode,
     },
+    include: {
+      modules: true,
+    },
   });
+
+  let classesModules = classes.flatMap((cls) => cls.modules);
+  const matchingModules = classesModules.filter((classModule) =>
+    teacherModules.some(
+      (teacherModule) => teacherModule.teacherid === classModule.teacherid
+    )
+  );
+
+  // const modules =
   return res.render("pages/session", {
     title: "Record new session",
-    modules: teacherModules,
+    modules: matchingModules,
     classes,
     links: navlinks.recordSession,
   });
@@ -553,41 +699,90 @@ router.get("/record-attendance", requireLogin, async (req, res) => {
   });
 });
 
-router.post("/assign-attendance", requireLogin, async (req, res) => {
-  const fingerprintId = req.body.fingerprint;
-  const student = await prisma.students.findFirst({
-    where: { fingerprintid: fingerprintId },
+// Fingerprint scanning page route
+router.get("/scan-fingerprint", requireLogin, (req, res) => {
+  console.log(
+    "Current fingerprint in session:",
+    req.session.studentFingerprintId
+  );
+  res.render("pages/scan-fingerprint", {
+    title: "Scan Fingerprint",
+    links: navlinks.general,
   });
-  if (student) {
-    try {
-      const existingRecord = await prisma.attendance.findFirst({
+});
+
+router.post("/assign-attendance", requireLogin, async (req, res) => {
+  try {
+    const student = await prisma.students.findFirst({
+      where: { name: req.body.name },
+    });
+    if (student) {
+      if (req.session.lessonId == undefined) {
+        req.flash(
+          "error",
+          "Please select a lesson before recording attendance!"
+        );
+        res.redirect("back");
+      } else {
+        try {
+          const existingRecord = await prisma.attendance.findFirst({
+            where: {
+              fingerprintid: student.fingerprintid,
+              lessonid: req.session.lessonId,
+            },
+          });
+          if (!existingRecord) {
+            await prisma.attendance.create({
+              data: {
+                lessonid: req.session.lessonId,
+                fingerprintid: student.fingerprintid,
+                present: true,
+              },
+            });
+            req.flash("success", "Record entered successfully!");
+            await prisma.fingerprintscans.delete({
+              where: {
+                createdat_fingerprintid: {
+                  createdat: req.session.latestScanTime,
+                  fingerprintid: req.session.latestScanId,
+                },
+              },
+            });
+            return res.redirect("back");
+          } else {
+            req.flash("error", "Attendance already recorded!");
+            await prisma.fingerprintscans.delete({
+              where: {
+                createdat_fingerprintid: {
+                  createdat: req.session.latestScanTime,
+                  fingerprintid: req.session.latestScanId,
+                },
+              },
+            });
+            return res.redirect("back");
+          }
+        } catch (error) {
+          req.flash("error", "Error entering record!");
+          console.error(error);
+          return res.redirect("back");
+        }
+      }
+    } else {
+      req.flash("error", "Student not found!");
+      await prisma.fingerprintscans.delete({
         where: {
-          fingerprintid: fingerprintId,
-          lessonid: req.session.lessonId,
+          createdat_fingerprintid: {
+            createdat: req.session.latestScanTime,
+            fingerprintid: req.session.latestScanId,
+          },
         },
       });
-      if (!existingRecord) {
-        const studentRecord = await prisma.attendance.create({
-          data: {
-            lessonid: req.session.lessonId,
-            fingerprintid: fingerprintId,
-            present: true,
-          },
-        });
-        req.flash("success", "Record entered successfully!");
-        return res.redirect("back");
-      } else {
-        req.flash("error", "Attendance already recorded!");
-        return res.redirect("back");
-      }
-    } catch (error) {
-      req.flash("error", "Error entering record!");
-      console.error(error);
       return res.redirect("back");
     }
-  } else {
-    req.flash("error", "Student not found!");
-    return res.redirect("back");
+  } catch (e) {
+    req.flash("error", "Internal Server Error!");
+    res.status(502).redirect("back");
+    throw new Error("Internal Server error: ", e);
   }
 });
 
@@ -639,7 +834,7 @@ router.get("/attendance/:module", requireLogin, async (req, res) => {
   const attendanceRecords = await Promise.all(attendanceRecordsPromises);
 
   return res.render("pages/attendance", {
-    title: `Attendance record for ${moduleName}`,
+    title: `Attendance record for ${moduleName} ${Module.code}`,
     students: students.flat(),
     lessons,
     attendanceRecords: attendanceRecords.flat(),
