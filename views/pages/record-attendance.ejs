@@ -1,22 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Record Attendance</title>
-    <style>
-      @import url("/css/record-attendance.css");
-    </style>
-    <script src="/js/main.js" defer></script>
-  </head>
-  <body>
-    <%- include('../partials/header') %>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Record Attendance</title>
+  <style>
+    @import url("/css/record-attendance.css");
+  </style>
+  <script src="/js/main.js" defer></script>
+  <script src="https://unpkg.com/htmx.org@2.0.1"></script>
+</head>
+
+<body>
+  <%- include('../partials/header') %>
     <main>
-      <form action="/assign-attendance" method="post">
-        <div class="formcheck">
-          <label for="fingerprint">Fingerprint <data></data>:</label>
-          <input type="text" id="fingerprint" name="fingerprint" />
+      <form action="/assign-attendance" method="post" style="background: #7b7a7a;">
+        <div class="formcheck" id="formcheck">
+          <label for="name">Name: </label>
+          <input type="text" id="name" name="name" placeholder="Students Name" />
         </div>
+        <button class="formcheck"
+          style="cursor: pointer; text-align: center; display: block; background: var(--main-bg); color: var(--main-text); margin: 10px auto;"
+          hx-get="/get-fingerprint-id" 
+          hx-trigger="click" 
+          hx-target="#formcheck" 
+          hx-swap="innerHTML">
+          Get ID
+        </button>
         <button type="submit">Submit</button>
       </form>
       <div class="finish">
@@ -27,22 +38,23 @@
     </main>
     <%- include ('../partials/footer') %>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const inputs = document.querySelectorAll("input");
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          const inputs = document.querySelectorAll("input");
 
-        inputs.forEach((inputElement) => {
-          // Add focus event listener
-          inputElement.addEventListener("focus", function () {
-            this.classList.add("focused");
-          });
+          inputs.forEach((inputElement) => {
+            // Add focus event listener
+            inputElement.addEventListener("focus", function () {
+              this.classList.add("focused");
+            });
 
-          // Add blur event listener
-          inputElement.addEventListener("blur", function () {
-            this.classList.remove("focused");
+            // Add blur event listener
+            inputElement.addEventListener("blur", function () {
+              this.classList.remove("focused");
+            });
           });
         });
-      });
-    </script>
-  </body>
+      </script>
+</body>
+
 </html>

@@ -25,7 +25,7 @@
   --success-bg: #9af896;
 }
 
-html{
+html {
   overflow-x: hidden;
 }
 
@@ -85,6 +85,24 @@ nav a.active {
 
 nav a:hover {
   background-color: var(--hover-bg);
+}
+
+.toPdf{
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background: var(--main-bg);
+  color: var(--second-text);
+  display: block;
+  box-shadow: 2px 3px 4px var(--second-bg);
+  margin: .5rem auto;
+  transition: all .3s ease;
+}
+
+.toPdf:hover{
+  background: var(--hover-bg);
 }
 
 main {
@@ -262,7 +280,9 @@ form {
   outline: none;
 }
 
-input.focused {
+input:focus,
+input:focus-visible,
+input:focus-within {
   background-color: var(--main-text);
   color: var(--main-bg);
 }
