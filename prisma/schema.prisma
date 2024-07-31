@@ -10,7 +10,7 @@ datasource db {
 model attendance {
   id            Int     @id @default(autoincrement())
   lessonid      Int
-  fingerprintid String  @db.VarChar(255)
+  fingerprintid Int
   present       Boolean @default(false)
   lessons       lessons @relation(fields: [lessonid], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
@@ -78,7 +78,7 @@ model student_module {
 model students {
   name               String           @db.VarChar(255)
   registrationnumber String           @id
-  fingerprintid      String           @unique @db.VarChar(255)
+  fingerprintid      Int              @unique
   classid            Int
   student_module     student_module[]
   classes            classes          @relation(fields: [classid], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -90,4 +90,11 @@ model teachers {
   departmentcode       String     @db.VarChar(10)
   password             String     @db.VarChar(255)
   department           department @relation(fields: [departmentcode], references: [code], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model fingerprintscans {
+  createdat     DateTime @db.Timestamp(6)
+  fingerprintid Int
+
+  @@id([createdat, fingerprintid])
 }
