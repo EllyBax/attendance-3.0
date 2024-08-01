@@ -23,19 +23,19 @@ const navlinks = {
   home: [
     { url: "/new-student", name: "New Student" },
     { url: "/new-teacher", name: "New Teacher" },
-    { url: "/record-session", name: "Record Attendance" },
+    { url: "/get-class", name: "Record Attendance" },
     { url: "/logout", name: "Logout" },
   ],
   newStudent: [
     { url: "/home", name: "Home" },
     { url: "/new-teacher", name: "New Teacher" },
-    { url: "/record-session", name: "Record Attendance" },
+    { url: "/get-class", name: "Record Attendance" },
     { url: "/logout", name: "Logout" },
   ],
   newTeacher: [
     { url: "/home", name: "home" },
     { url: "/new-student", name: "New Student" },
-    { url: "/record-session", name: "Record Attendance" },
+    { url: "/get-class", name: "Record Attendance" },
     { url: "/logout", name: "Logout" },
   ],
   recordSession: [
@@ -48,10 +48,20 @@ const navlinks = {
     { url: "/home", name: "home" },
     { url: "/new-student", name: "New Student" },
     { url: "/new-teacher", name: "New Teacher" },
-    { url: "/record-session", name: "Record Attendance" },
+    { url: "/get-class", name: "Record Attendance" },
     { url: "/logout", name: "Logout" },
   ],
 };
+
+const daysOfTheWeek = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 
 const router = express.Router();
 router.use(
@@ -226,34 +236,6 @@ router.post("/hod-registration", async (req, res) => {
 /**
  * Routes related to teacher functionality, including login, registration, and module management.
  */
-// teachers routes
-router.get("/record-session", requireLogin, async (req, res) => {
-  const teacherModules = await prisma.modules.findMany({
-    where: { teacherid: BigInt(req.session.teacherId) },
-  });
-  const classes = await prisma.classes.findMany({
-    where: {
-      departmentcode: req.session.departmentcode,
-    },
-    include: {
-      modules: true,
-    },
-  });
-
-  let classesModules = classes.flatMap((cls) => cls.modules);
-  const matchingModules = classesModules.filter((classModule) =>
-    teacherModules.some(
-      (teacherModule) => teacherModule.teacherid === classModule.teacherid
-    )
-  );
-  return res.render("pages/session", {
-    title: "Record Attendance",
-    classes,
-    modules: matchingModules,
-    links: navlinks.recordSession,
-  });
-});
-
 router.get("/teachers", requireHodLogin, async (req, res) => {
   const modules = await prisma.modules.findMany({
     where: {
@@ -630,11 +612,7 @@ router.post("/register-student-modules", requireLogin, async (req, res) => {
   }
 });
 
-// session and attendance
-router.get("/record-session", requireLogin, async (req, res) => {
-  const teacherModules = await prisma.modules.findMany({
-    where: { teacherid: BigInt(req.session.teacherId) },
-  });
+router.get("/get-class", requireLogin, async (req, res) => {
   const classes = await prisma.classes.findMany({
     where: {
       departmentcode: req.session.departmentcode,
@@ -644,40 +622,70 @@ router.get("/record-session", requireLogin, async (req, res) => {
     },
   });
 
-  let classesModules = classes.flatMap((cls) => cls.modules);
-  const matchingModules = classesModules.filter((classModule) =>
-    teacherModules.some(
-      (teacherModule) => teacherModule.teacherid === classModule.teacherid
-    )
-  );
+  return res.render("pages/select-class", {
+    title: "Select Class",
+    links: navlinks.recordSession,
+    classes,
+  });
+});
 
-  // const modules =
+// session and attendance
+router.post("/record-session", requireLogin, async (req, res) => {
+  const currentDay = daysOfTheWeek[new Date().getDay()];
+  const _class = await prisma.classes.findFirst({
+    where: { name: req.body._class },
+    include: { modules: true },
+  });
+  const currentDayLessons = await prisma.timetable.findMany({
+    where: { day: currentDay },
+  });
+  // if (req.session.teacherId === undefined) {
+  //   const teacherModules = await prisma.modules.findMany({
+  //     where: { departmentcode: req.session.departmentcode },
+  //   });
+  // } else {
+  //   const teacherModules = await prisma.modules.findMany({
+  //     where: { teacherid: BigInt(req.session.teacherId) },
+  //   });
+  // }
+
+  const classesModules = _class.modules.flat();
+
+  // const matchingModules = classesModules.filter((classModule) =>
+  //   teacherModules.some(
+  //     (teacherModule) => teacherModule.teacherid === classModule.teacherid
+  //   )
+  // );
+
+  req.session.classId = _class.id;
+
   return res.render("pages/session", {
     title: "Record new session",
-    modules: matchingModules,
-    classes,
+    daysOfTheWeek,
+    modules: classesModules,
+    classId: _class.id,
+    currentDayLessons,
+    currentDay,
     links: navlinks.recordSession,
   });
 });
 
 router.post("/record-attendance", requireLogin, async (req, res) => {
-  const { date, _class, _module, startTime, endTime } = req.body;
-  const dateString = new Date(date).toISOString().split("T")[0];
-  const startTimeString = startTime; // This is already a string
-  const endTimeString = endTime; // This is already a string
+  const data = req.body._module.split("-");
+  const startTime = data[0];
+  const endTime = data[1];
+  const _module = data[2];
+  const venue = data[3];
 
-  const classId = await prisma.classes.findFirst({
-    where: { name: _class },
-    select: { id: true },
-  });
+  const dateString = new Date().toISOString().split("T")[0];
 
   try {
     const lessonSession = await prisma.lessons.create({
       data: {
         date: dateString,
-        starttime: startTimeString,
-        endtime: endTimeString,
-        classid: classId.id,
+        starttime: startTime,
+        endtime: endTime,
+        classid: req.session.classId,
         modulecode: _module,
       },
     });
@@ -686,9 +694,9 @@ router.post("/record-attendance", requireLogin, async (req, res) => {
     req.flash("success", "Record attendance for new lesson!");
     return res.redirect("/record-attendance");
   } catch (error) {
-    req.flash("error", "Error creating lesson");
-    throw new Error(error);
-    // return res.redirect("back");
+    req.flash("error", "Internal Server Error!");
+    res.status(502).redirect("back");
+    throw new Error("Internal Server Error: ", error);
   }
 });
 
@@ -722,7 +730,7 @@ router.post("/assign-attendance", requireLogin, async (req, res) => {
           "error",
           "Please select a lesson before recording attendance!"
         );
-        res.redirect("back");
+        res.redirect("/record-session");
       } else {
         try {
           const existingRecord = await prisma.attendance.findFirst({
@@ -779,10 +787,10 @@ router.post("/assign-attendance", requireLogin, async (req, res) => {
       });
       return res.redirect("back");
     }
-  } catch (e) {
+  } catch (error) {
     req.flash("error", "Internal Server Error!");
     res.status(502).redirect("back");
-    throw new Error("Internal Server error: ", e);
+    throw new Error("Internal Server error: ", error);
   }
 });
 

@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
 
-    <style>
-      @import url("/css/main.css");
-    </style>
-    <script src="/js/main.js" defer></script>
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
 
-  <body>
-    <%- include('../partials/header') %>
+  <style>
+    @import url("/css/main.css");
+  </style>
+  <script src="/js/main.js" defer></script>
+</head>
+
+<body>
+  <%- include('../partials/header') %>
     <main>
       <div class="navpane">
         <div class="navlinks">
           <a href="/teachers">TEACHERS</a>
           <a href="/classes">CLASSES</a>
           <!-- <a href="/courses">COURSES</a> -->
-          <a href="/modules">MODULES</a>
+          <!-- <a href="/modules">MODULES</a> -->
         </div>
       </div>
     </main>
     <%- include ('../partials/footer') %>
-  </body>
+</body>
+
 </html>

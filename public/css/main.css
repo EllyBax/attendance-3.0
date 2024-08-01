@@ -287,6 +287,11 @@ input:focus-within {
   color: var(--main-bg);
 }
 
+input[disabled]{
+  background-color: var(--main-text);
+  color: var(--main-bg);
+}
+
 button[type="submit"] {
   all: unset;
   background-color: var(--main-bg);
