@@ -16,13 +16,14 @@ model attendance {
 }
 
 model classes {
-  id             Int        @id @default(autoincrement())
-  name           String     @db.VarChar(20)
-  departmentcode String     @db.VarChar(10)
-  department     department @relation(fields: [departmentcode], references: [code], onDelete: NoAction, onUpdate: NoAction)
+  id             Int         @id @default(autoincrement())
+  name           String      @db.VarChar(20)
+  departmentcode String      @db.VarChar(10)
+  department     department  @relation(fields: [departmentcode], references: [code], onDelete: NoAction, onUpdate: NoAction)
   lessons        lessons[]
   modules        modules[]
   students       students[]
+  timetable      timetable[]
 }
 
 model department {
@@ -64,6 +65,7 @@ model modules {
   classes        classes?         @relation(fields: [classid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   department     department       @relation(fields: [departmentcode], references: [code], onDelete: NoAction, onUpdate: NoAction)
   student_module student_module[]
+  timetable      timetable[]
 }
 
 model student_module {
@@ -97,4 +99,17 @@ model fingerprintscans {
   fingerprintid Int
 
   @@id([createdat, fingerprintid])
+}
+
+model timetable {
+  id         Int      @id @default(autoincrement())
+  starttime  String?
+  endtime    String?
+  modulecode String?
+  classid    Int?
+  day        String?
+  modulename String?
+  venue      String?
+  classes    classes? @relation(fields: [classid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  modules    modules? @relation(fields: [modulecode], references: [code], onDelete: NoAction, onUpdate: NoAction)
 }
