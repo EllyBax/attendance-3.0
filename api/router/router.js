@@ -308,14 +308,15 @@ router.get("/new-teacher", requireHodLogin, async (req, res) => {
 });
 
 router.post("/teacher-registration", async (req, res) => {
-  const { name, identificationNumber, departmentcode } = req.body;
+  const { name, identificationNumber, department, password } = req.body;
+  const hashedPassword = await argon.hash(password)
   try {
     const teacher = await prisma.teachers.create({
       data: {
         identificationnumber: identificationNumber,
         name: name,
-        departmentcode: departmentcode,
-        password: password,
+        departmentcode: department,
+        password: hashedPassword,
       },
     });
     console.log("Teacher created successfully!\n");
@@ -488,13 +489,6 @@ router.post("/student-registration", requireLogin, async (req, res) => {
       },
     });
 
-    console.log({
-      name,
-      registrationNumber: registrationNumber,
-      classid: _classid.id,
-      fingerprintid: fingerprintid,
-    });
-
     req.session.studentId = student.registrationnumber.toString();
     req.session.studentClass = student.classid;
     req.session.fingerprintid = student.fingerprintid;
@@ -517,20 +511,32 @@ router.post("/logger", (req, res) => {
 // Fingerprint submission route
 router.post("/submit-fingerprint", async (req, res) => {
   const fingerprintId = req.body.fingerprintData;
+  console.log({ Data: parseInt(fingerprintId) });  
+
   const currentDate = new Date();
 
-  try {
-    await prisma.fingerprintscans.create({
-      data: {
-        fingerprintid: fingerprintId,
-        createdat: currentDate,
-      },
-    });
-    return res.status(200).send({ success: "Fingerprint scan successful!" });
-  } catch (err) {
-    console.error("Error storing fingerprintData: ", err);
-    // req.flash("error", "Couldn't process fingerprint");
-    return res.status(400).send({ error: "Couldn't process fingerprint" });
+  if(req.body.fingerprintData){
+    try {
+      if (await prisma.fingerprintscans.findFirst({
+        where: { fingerprintid: parseInt(fingerprintId) }
+      })) {
+        return res.status(201).send({ error: "Fingerprint already scanned!" });
+      } else {
+        await prisma.fingerprintscans.create({
+          data: {
+            fingerprintid: parseInt(fingerprintId),
+            createdat: currentDate,
+          },
+        });
+        return res.status(200).send({ success: "Fingerprint scan successful!" });
+      }
+    } catch (err) {
+      console.error("Error storing fingerprintData: ");
+      res.status(400).send({ error: "Couldn't process fingerprint" });
+      throw new Error(err)
+    }
+  } else{
+    console.error('Something went wrong: ', fingerprintId);
   }
 });
 
@@ -613,14 +619,30 @@ router.post("/register-student-modules", requireLogin, async (req, res) => {
 });
 
 router.get("/get-class", requireLogin, async (req, res) => {
-  const classes = await prisma.classes.findMany({
+  let classes = await prisma.classes.findMany({
     where: {
       departmentcode: req.session.departmentcode,
-    },
-    include: {
-      modules: true,
-    },
+    }
   });
+
+  const teachersModules = await prisma.modules.findMany({
+    where: { teacherid: req.session.teacherId }
+  });
+
+  for (const _module of teachersModules) {
+    const enrolledClasses = await prisma.modules.findMany({
+      where: {
+        code: _module.code,
+      },
+      select: {
+        classes: true
+      }
+    });
+
+    enrolledClasses.forEach(enrolledClass => {
+      classes.push(enrolledClass.classes);
+    });
+  }
 
   return res.render("pages/select-class", {
     title: "Select Class",

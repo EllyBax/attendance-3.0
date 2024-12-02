@@ -16,11 +16,11 @@
     <div class="navpane">
       <% if (classes.length > 0){%>
         <div class="navlinks">
-        <% for (let _class of classes) { %>
-            <a href="modules/<%= _class.name %>">
+        <% classes.forEach(_class => { %>
+          <a href="modules/<%= _class.name %>">
               <%= _class.name %>
             </a>
-        <% } %>
+        <% }); %>
       </div>
      <% } else {%>
       <h3>No classes registered here</h3>
