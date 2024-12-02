@@ -60,89 +60,111 @@ const prisma = new PrismaClient();
 //   console.log("Created module: ", module.name);
 // });
 
-const timetable = await prisma.timetable.createMany({
-  data: [
-    {
-      day: "Monday",
-      classid: 253,
-      modulecode: "GSU 08211",
-      starttime: "09:00",
-      endtime: "11:00",
-    },
-    {
-      day: "Monday",
-      classid: 253,
-      modulecode: "ETU 08222",
-      starttime: "12:00",
-      endtime: "15:00",
-    },
-    {
-      day: "Tuesday",
-      classid: 253,
-      modulecode: "ETU 08224",
-      starttime: "08:00",
-      endtime: "11:00",
-    },
-    {
-      day: "Tuesday",
-      classid: 253,
-      modulecode: "COU 08202",
-      starttime: "12:00",
-      endtime: "14:00",
-    },
-    {
-      day: "Wednesday",
-      classid: 253,
-      modulecode: "ETU 08221",
-      starttime: "10:00",
-      endtime: "13:00",
-    },
-    {
-      day: "Wednesday",
-      classid: 253,
-      modulecode: "COU 08202",
-      starttime: "14:00",
-      endtime: "253:00",
-    },
-    {
-      day: "Thursday",
-      classid: 253,
-      modulecode: "ETU 08223",
-      starttime: "08:00",
-      endtime: "11:00",
-    },
-    {
-      day: "Thursday",
-      classid: 253,
-      modulecode: "ETU 08224",
-      starttime: "12:00",
-      endtime: "14:00",
-    },
-    {
-      day: "Thursday",
-      classid: 253,
-      modulecode: "ETU 08222",
-      starttime: "15:00",
-      endtime: "18:00",
-    },
-    {
-      day: "Friday",
-      classid: 253,
-      modulecode: "COU 08202",
-      starttime: "07:00",
-      endtime: "10:00",
-    },
-    {
-      day: "Friday",
-      classid: 253,
-      modulecode: "GSU 08211",
-      starttime: "12:00",
-      endtime: "14:00",
-    },
-  ],
-});
+// const timetable = await prisma.timetable.createMany({
+//   data: [
+//     {
+//       day: "Monday",
+//       classid: 253,
+//       modulecode: "GSU 08211",
+//       starttime: "09:00",
+//       endtime: "11:00",
+//       modulename: "Entrepreneurship",
+//       venue: "B12"
+//     },
+//     {
+//       day: "Monday",
+//       classid: 253,
+//       modulecode: "ETU 08222",
+//       starttime: "12:00",
+//       endtime: "15:00",
+//       modulename: "Radar",
+//       venue: "W15-2"
+//     },
+//     {
+//       day: "Tuesday",
+//       classid: 253,
+//       modulecode: "ETU 08224",
+//       starttime: "08:00",
+//       endtime: "11:00",
+//       modulename: "Satellite",
+//       venue: "W15-1"
+//     },
+//     {
+//       day: "Tuesday",
+//       classid: 253,
+//       modulecode: "COU 08202",
+//       starttime: "12:00",
+//       endtime: "14:00",
+//       modulename: "Robotics",
+//       venue: "D3"
+//     },
+//     {
+//       day: "Wednesday",
+//       classid: 253,
+//       modulecode: "ETU 08221",
+//       starttime: "10:00",
+//       endtime: "13:00",
+//       modulename: "Project",
+//       venue: "TT9-1"
+//     },
+//     {
+//       day: "Wednesday",
+//       classid: 253,
+//       modulecode: "COU 08202",
+//       starttime: "14:00",
+//       endtime: "253:00",
+//       modulename: "Robotics",
+//       venue: "D3"
+//     },
+//     {
+//       day: "Thursday",
+//       classid: 253,
+//       modulecode: "ETU 08223",
+//       starttime: "08:00",
+//       endtime: "11:00",
+//       modulename: "Broadcasting",
+//       venue: "TT5-2"
+//     },
+//     {
+//       day: "Thursday",
+//       classid: 253,
+//       modulecode: "ETU 08224",
+//       starttime: "12:00",
+//       endtime: "14:00",
+//       modulename: "Satellite",
+//       venue: "W15-1"
+//     },
+//     {
+//       day: "Thursday",
+//       classid: 253,
+//       modulecode: "ETU 08222",
+//       starttime: "15:00",
+//       endtime: "18:00",
+//       modulename: "Radar",
+//       venue: "W15-2"
+//     },
+//     {
+//       day: "Friday",
+//       classid: 253,
+//       modulecode: "COU 08202",
+//       starttime: "07:00",
+//       endtime: "10:00",
+//       modulename: "Robotics",
+//       venue: "D2"
+//     },
+//     {
+//       day: "Friday",
+//       classid: 253,
+//       modulecode: "GSU 08211",
+//       starttime: "12:00",
+//       endtime: "14:00",
+//       modulename: "Entrepreneurship",
+//       venue: "B12"
+//     },
+//   ],
+// });
 
-console.log(timetable);
+// console.log(timetable);
 
 console.log("\ndone");
 
