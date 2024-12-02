@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/server.js"
+    "dev": "nodemon src/server.js",
+    "db:migrate": "npx prisma migrate dev --name $1",
+    "db:generate": "npx prisma generate"
   },
   "keywords": [],
   "author": "",
